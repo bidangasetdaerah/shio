@@ -142,7 +142,7 @@
       hasilDetailEl.innerHTML = "";
     }
 
-    // Cek angka dengan logika cocok kepala/ekor
+    // Cek angka dengan logika cocok digit dari angka main
     document.getElementById('cek-angka').addEventListener('click', () => {
       const angkaInput = document.getElementById('angka-main').value.trim();
       if (!angkaInput || !currentShio) {
@@ -151,54 +151,57 @@
         return;
       }
 
-      const angkaList = angkaInput.split(/\s+/).map(a => a.padStart(2, '0'));
+      // Ambil semua digit angka main (1 digit per elemen)
+      const inputDigits = angkaInput.replace(/\s+/g, '').split('');
 
-      // Fungsi cek cocok kepala/ekor
-      const cocokkan = (angka, list) => {
+      // Fungsi cek cocok kepala/ekor digit dengan angka main
+      const cocokkanDigit = (angka, digits) => {
         const kepala = angka.charAt(0);
         const ekor = angka.charAt(1);
-        return list.some(num => num.charAt(0) === kepala || num.charAt(1) === ekor);
+        return digits.includes(kepala) || digits.includes(ekor);
       };
 
-      const cocokKuat = angkaList.filter(a => cocokkan(a, angkaKuatList));
-      const cocokCadangan = angkaList.filter(a => !cocokkan(a, angkaKuatList) && cocokkan(a, angkaCadanganList));
+      // Filter angka kuat/cadangan yang mengandung digit input
+      const cocokKuat = angkaKuatList.filter(num => cocokkanDigit(num, inputDigits));
+      const cocokCadangan = angkaCadanganList.filter(num => cocokkanDigit(num, inputDigits));
 
       // Ringkasan
       hasilKecocokanEl.innerHTML = `
-        <div class="text-green-700">Cocok di Kuat (kepala/ekor): ${cocokKuat.join('*') || '-'}</div>
-        <div class="text-gray-700">Cocok di Cadangan (kepala/ekor): ${cocokCadangan.join('*') || '-'}</div>
+        <div class="text-green-700">Cocok di Kuat (mengandung digit input): ${cocokKuat.join('*') || '-'}</div>
+        <div class="text-gray-700">Cocok di Cadangan (mengandung digit input): ${cocokCadangan.join('*') || '-'}</div>
       `;
 
       // Detail angka main
       let detailHTML = `<h4 class="font-semibold mb-2">Detail Angka Main:</h4>`;
       detailHTML += `<div class="grid grid-cols-3 gap-2">`;
 
-      angkaList.forEach(a => {
+      angkaInput.split(/\s+/).forEach(a => {
         let kategori = '';
         let warna = '';
-        if (cocokkan(a, angkaKuatList)) {
+        const digitsA = a.split('');
+        const cocokDiKuat = angkaKuatList.some(num => digitsA.some(d => num.includes(d)));
+        const cocokDiCadangan = angkaCadanganList.some(num => digitsA.some(d => num.includes(d)));
+
+        if (cocokDiKuat) {
           kategori = 'Kuat';
           warna = 'bg-green-100 text-green-800';
-        } else if (cocokkan(a, angkaCadanganList)) {
+        } else if (cocokDiCadangan) {
           kategori = 'Cadangan';
           warna = 'bg-gray-100 text-gray-800';
         } else {
           kategori = 'Tidak Masuk';
           warna = 'bg-red-100 text-red-800';
         }
+
         detailHTML += `<div class="p-2 rounded border ${warna} text-center">${a}<br><span class="text-xs">${kategori}</span></div>`;
       });
 
       detailHTML += `</div>`;
 
-      // Hanya angka 2D dari Kuat dan Cadangan yang mengandung angka main
-      const kuatMengandung = angkaKuatList.filter(num => cocokkan(num, angkaList));
-      const cadanganMengandung = angkaCadanganList.filter(num => cocokkan(num, angkaList));
-
       detailHTML += `
         <h4 class="font-semibold mt-4">Angka 2D yang Mengandung Angka Main:</h4>
-        <div class="mt-2 text-green-700 text-xs">Kuat: ${kuatMengandung.join('*') || '-'}</div>
-        <div class="mt-1 text-gray-700 text-xs">Cadangan: ${cadanganMengandung.join('*') || '-'}</div>
+        <div class="mt-2 text-green-700 text-xs">Kuat: ${cocokKuat.join('*') || '-'}</div>
+        <div class="mt-1 text-gray-700 text-xs">Cadangan: ${cocokCadangan.join('*') || '-'}</div>
       `;
 
       hasilDetailEl.innerHTML = detailHTML;
