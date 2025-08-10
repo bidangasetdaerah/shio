@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SHIO Kuat & Cadangan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">SHIO Kuat & Cadangan</h1>
+    <p class="text-sm text-gray-600 mb-6">Pilih SHIO untuk melihat daftar <strong>Kuat</strong> dan <strong>Cadangan</strong>.</p>
+
+    <!-- Tombol SHIO -->
+    <div id="shio-buttons" class="flex flex-wrap gap-2 mb-4"></div>
+
+    <!-- Hasil -->
+    <div id="result" class="bg-white p-4 rounded shadow border space-y-4">
+      <div>
+        <div id="selected-shio" class="text-lg font-medium">Pilih SHIO</div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-green-700">SHIO Kuat</h3>
+        <div id="kuat-numbers" class="mt-2 flex flex-wrap gap-2 text-sm"></div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-gray-700">SHIO Cadangan</h3>
+        <div id="cadangan-numbers" class="mt-2 flex flex-wrap gap-2 text-sm"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const shioData = {
+      1:  { mapping: [2,3,4,5,8,9,10], kuat: [2,4,8,5,9] },
+      2:  { mapping: [3,4,5,6,9,10,11], kuat: [6,10,4,5,11] },
+      3:  { mapping: [4,5,6,7,10,11,12], kuat: [7,11,4,6,10] },
+      4:  { mapping: [5,6,7,8,11,12,1], kuat: [1,11,7,8,12] },
+      5:  { mapping: [6,7,8,9,12,1,2], kuat: [1,7,8,12,6] },
+      6:  { mapping: [7,8,9,10,1,2,3], kuat: [1,7,2,10] },
+      7:  { mapping: [8,9,10,11,2,3,4], kuat: [9,11,2,10] },
+      8:  { mapping: [9,10,11,12,3,4,5], kuat: [3,9,11,4,12] },
+      9:  { mapping: [10,11,12,1,4,5,6], kuat: [1,11,4,10] },
+      10: { mapping: [11,12,1,2,5,6,7], kuat: [1,5,11,2,6] },
+      11: { mapping: [12,1,2,3,6,7,8], kuat: [3,7,2,6,12] },
+      12: { mapping: [1,2,3,4,7,8,9], kuat: [3,7,9,4,8] }
+    };
+
+    const btnContainer = document.getElementById('shio-buttons');
+    const kuatEl = document.getElementById('kuat-numbers');
+    const cadanganEl = document.getElementById('cadangan-numbers');
+    const selectedEl = document.getElementById('selected-shio');
+
+    function pad2(num) {
+      return num.toString().padStart(2, '0');
+    }
+
+    function renderShioButtons() {
+      for (let i = 1; i <= 12; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = `SHIO ${i}`;
+        btn.className = "px-3 py-1 rounded border bg-white hover:bg-indigo-50 text-sm";
+        btn.addEventListener('click', () => selectShio(i));
+        btnContainer.appendChild(btn);
+      }
+    }
+
+    function selectShio(shio) {
+      selectedEl.textContent = `SHIO ${shio}`;
+      const data = shioData[shio];
+      if (!data) return;
+
+      // SHIO Kuat
+      kuatEl.innerHTML = '';
+      data.kuat.forEach(num => {
+        const chip = document.createElement('div');
+        chip.className = 'px-2 py-1 bg-green-100 rounded border';
+        chip.textContent = pad2(num);
+        kuatEl.appendChild(chip);
+      });
+
+      // SHIO Cadangan
+      cadanganEl.innerHTML = '';
+      const cadangan = data.mapping.filter(num => !data.kuat.includes(num));
+      cadangan.forEach(num => {
+        const chip = document.createElement('div');
+        chip.className = 'px-2 py-1 bg-gray-100 rounded border';
+        chip.textContent = pad2(num);
+        cadanganEl.appendChild(chip);
+      });
+    }
+
+    renderShioButtons();
+  </script>
+</body>
+</html>
