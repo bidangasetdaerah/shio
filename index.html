@@ -7,14 +7,27 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
-  <div class="max-w-4xl mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4">SHIO Kuat & Cadangan</h1>
-    <p class="text-sm text-gray-600 mb-6">Pilih SHIO untuk melihat daftar <strong>Kuat</strong> dan <strong>Cadangan</strong>.</p>
+  <div class="max-w-4xl mx-auto p-6 space-y-6">
+    <h1 class="text-2xl font-bold">SHIO Kuat & Cadangan</h1>
+    <p class="text-sm text-gray-600">Pilih SHIO untuk melihat daftar <strong>Kuat</strong> dan <strong>Cadangan</strong> beserta angka-angkanya.</p>
 
     <!-- Tombol SHIO -->
-    <div id="shio-buttons" class="flex flex-wrap gap-2 mb-4"></div>
+    <div id="shio-buttons" class="flex flex-wrap gap-2"></div>
 
-    <!-- Hasil -->
+    <!-- Input angka main -->
+    <div class="bg-white p-4 rounded shadow border">
+      <label for="angka-main" class="block text-sm font-medium mb-2">Masukkan Angka Main (pisahkan dengan spasi atau enter)</label>
+      <textarea id="angka-main" rows="3" class="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300 text-sm"></textarea>
+      <button id="cek-angka" class="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">Cek Kecocokan</button>
+      
+      <!-- Ringkasan hasil -->
+      <div id="hasil-kecocokan" class="mt-3 text-sm"></div>
+      
+      <!-- Detail hasil -->
+      <div id="hasil-detail" class="mt-3 text-sm"></div>
+    </div>
+
+    <!-- Hasil SHIO -->
     <div id="result" class="bg-white p-4 rounded shadow border space-y-4">
       <div>
         <div id="selected-shio" class="text-lg font-medium">Pilih SHIO</div>
@@ -23,11 +36,13 @@
       <div>
         <h3 class="text-sm font-semibold text-green-700">SHIO Kuat</h3>
         <div id="kuat-numbers" class="mt-2 flex flex-wrap gap-2 text-sm"></div>
+        <div id="kuat-angka" class="mt-2 text-xs text-green-800"></div>
       </div>
 
       <div>
         <h3 class="text-sm font-semibold text-gray-700">SHIO Cadangan</h3>
         <div id="cadangan-numbers" class="mt-2 flex flex-wrap gap-2 text-sm"></div>
+        <div id="cadangan-angka" class="mt-2 text-xs text-gray-800"></div>
       </div>
     </div>
   </div>
@@ -48,10 +63,22 @@
       12: { mapping: [1,2,3,4,7,8,9], kuat: [3,7,9,4,8] }
     };
 
+    function getShioFromNumber(num) {
+      return ((num - 1) % 12) + 1;
+    }
+
     const btnContainer = document.getElementById('shio-buttons');
     const kuatEl = document.getElementById('kuat-numbers');
     const cadanganEl = document.getElementById('cadangan-numbers');
+    const kuatAngkaEl = document.getElementById('kuat-angka');
+    const cadanganAngkaEl = document.getElementById('cadangan-angka');
     const selectedEl = document.getElementById('selected-shio');
+    const hasilKecocokanEl = document.getElementById('hasil-kecocokan');
+    const hasilDetailEl = document.getElementById('hasil-detail');
+
+    let currentShio = null;
+    let angkaKuatList = [];
+    let angkaCadanganList = [];
 
     function pad2(num) {
       return num.toString().padStart(2, '0');
@@ -68,6 +95,7 @@
     }
 
     function selectShio(shio) {
+      currentShio = shio;
       selectedEl.textContent = `SHIO ${shio}`;
       const data = shioData[shio];
       if (!data) return;
@@ -90,7 +118,76 @@
         chip.textContent = pad2(num);
         cadanganEl.appendChild(chip);
       });
+
+      // Angka SHIO Kuat
+      angkaKuatList = [];
+      for (let i = 1; i <= 99; i++) {
+        if (data.kuat.includes(getShioFromNumber(i))) {
+          angkaKuatList.push(pad2(i));
+        }
+      }
+      kuatAngkaEl.textContent = `Angka: ${angkaKuatList.join('*')}`;
+
+      // Angka SHIO Cadangan
+      angkaCadanganList = [];
+      for (let i = 1; i <= 99; i++) {
+        if (cadangan.includes(getShioFromNumber(i))) {
+          angkaCadanganList.push(pad2(i));
+        }
+      }
+      cadanganAngkaEl.textContent = `Angka: ${angkaCadanganList.join('*')}`;
     }
+
+    // Cek angka dengan logika cocok kepala/ekor
+    document.getElementById('cek-angka').addEventListener('click', () => {
+      const angkaInput = document.getElementById('angka-main').value.trim();
+      if (!angkaInput || !currentShio) {
+        hasilKecocokanEl.textContent = "⚠️ Pilih SHIO dan masukkan angka terlebih dahulu.";
+        hasilDetailEl.innerHTML = "";
+        return;
+      }
+
+      const angkaList = angkaInput.split(/\s+/).map(a => a.padStart(2, '0'));
+
+      // Fungsi cek cocok kepala/ekor
+      const cocokkan = (angka, list) => {
+        const kepala = angka.charAt(0);
+        const ekor = angka.charAt(1);
+        return list.some(num => num.charAt(0) === kepala || num.charAt(1) === ekor);
+      };
+
+      const cocokKuat = angkaList.filter(a => cocokkan(a, angkaKuatList));
+      const cocokCadangan = angkaList.filter(a => !cocokkan(a, angkaKuatList) && cocokkan(a, angkaCadanganList));
+
+      // Ringkasan
+      hasilKecocokanEl.innerHTML = `
+        <div class="text-green-700">Cocok di Kuat (kepala/ekor): ${cocokKuat.join('*') || '-'}</div>
+        <div class="text-gray-700">Cocok di Cadangan (kepala/ekor): ${cocokCadangan.join('*') || '-'}</div>
+      `;
+
+      // Detail angka main
+      let detailHTML = `<h4 class="font-semibold mb-2">Detail Angka Main:</h4>`;
+      detailHTML += `<div class="grid grid-cols-3 gap-2">`;
+
+      angkaList.forEach(a => {
+        let kategori = '';
+        let warna = '';
+        if (cocokkan(a, angkaKuatList)) {
+          kategori = 'Kuat';
+          warna = 'bg-green-100 text-green-800';
+        } else if (cocokkan(a, angkaCadanganList)) {
+          kategori = 'Cadangan';
+          warna = 'bg-gray-100 text-gray-800';
+        } else {
+          kategori = 'Tidak Masuk';
+          warna = 'bg-red-100 text-red-800';
+        }
+        detailHTML += `<div class="p-2 rounded border ${warna} text-center">${a}<br><span class="text-xs">${kategori}</span></div>`;
+      });
+
+      detailHTML += `</div>`;
+      hasilDetailEl.innerHTML = detailHTML;
+    });
 
     renderShioButtons();
   </script>
