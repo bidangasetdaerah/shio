@@ -4,263 +4,152 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Shio & Kecocokan Angka</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f9fafb;
-      color: #333;
-      display: flex;
-    }
-
-    /* --- NAVBAR KIRI --- */
-    .sidebar {
-      width: 200px;
-      background-color: #1f2937;
-      color: white;
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      overflow-y: auto;
-      padding-top: 1rem;
-    }
-    .sidebar h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-      color: #facc15;
-    }
-    .sidebar a {
-      display: block;
-      padding: 0.5rem 1rem;
-      text-decoration: none;
-      color: white;
-      cursor: pointer;
-    }
-    .sidebar a:hover {
-      background-color: #374151;
-    }
-
-    /* --- DROPDOWN MENU --- */
-    .dropdown {
-      position: relative;
-    }
-    .dropdown-content {
-      display: none;
-      background-color: #111827;
-      margin-left: 0;
-      padding-left: 0;
-    }
-    .dropdown-content a {
-      padding-left: 2rem;
-      font-size: 0.9rem;
-    }
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-    /* --- MAIN CONTENT --- */
-    .main {
-      margin-left: 200px; /* biar tidak ketiban navbar */
-      padding: 1rem;
-      max-width: 600px;
-    }
-
-    /* --- STYLE ASLI KAMU --- */
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    #shio-buttons button {
-      margin: 0 0.3rem 0.3rem 0;
-      cursor: pointer;
-      background: white;
-      border: 1px solid #ddd;
-      padding: 0.3rem 0.8rem;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      transition: background-color 0.2s;
-    }
-    #shio-buttons button:hover {
-      background-color: #e0e7ff;
-      border-color: #6366f1;
-      color: #4f46e5;
-    }
-    #shio-buttons button:focus {
-      outline: none;
-      box-shadow: 0 0 3px #6366f1;
-    }
-    #shio-buttons {
-      margin-bottom: 1rem;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin: 0.8rem 0 0.3rem;
-    }
-    textarea, input[type=text] {
-      width: 100%;
-      padding: 0.4rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      resize: vertical;
-    }
-    button#cek-angka {
-      margin-top: 0.8rem;
-      background-color: #4f46e5;
-      color: white;
-      border: none;
-      padding: 0.6rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    button#cek-angka:hover {
-      background-color: #4338ca;
-    }
-    #selected-shio {
-      font-weight: bold;
-      margin-top: 0.5rem;
-      font-size: 1.1rem;
-      color: #4f46e5;
-    }
-    #kuat-numbers, #cadangan-numbers {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-top: 0.3rem;
-    }
-    #kuat-numbers div {
-      background-color: #bbf7d0;
-      border: 1px solid #22c55e;
-      padding: 0.2rem 0.5rem;
-      border-radius: 3px;
-      font-size: 0.85rem;
-    }
-    #cadangan-numbers div {
-      background-color: #e2e8f0;
-      border: 1px solid #94a3b8;
-      padding: 0.2rem 0.5rem;
-      border-radius: 3px;
-      font-size: 0.85rem;
-    }
-    #kuat-angka, #cadangan-angka {
-      font-size: 0.9rem;
-      margin-top: 0.3rem;
-      font-style: italic;
-      color: #374151;
-    }
-    #hasil-kecocokan {
-      margin-top: 1rem;
-    }
-    #hasil-kecocokan table {
-      border-collapse: collapse;
-      margin-bottom: 1rem;
-    }
-    #hasil-kecocokan th, #hasil-kecocokan td {
-      border: 1px solid #ccc;
-      padding: 0.3rem 0.5rem;
-      text-align: left;
-      font-family: monospace;
-      font-size: 0.85rem;
-      white-space: nowrap;
-    }
-    #hasil-kecocokan th {
-      background-color: #c7d2fe;
-    }
-    #hasil-detail {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      font-family: monospace;
-      font-size: 0.85rem;
-      white-space: pre-wrap;
-      max-height: 150px;
-      overflow-y: auto;
-      margin-top: 1rem;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="flex bg-gray-50 text-gray-800">
 
   <!-- SIDEBAR -->
-  <div class="sidebar">
-    <h2>Menu</h2>
-    <div class="dropdown">
-      <a>SHIO ▼</a>
-      <div class="dropdown-content">
-        <a href="#">2D SHIO MAIN 1</a>
-        <a href="#">2D SHIO MAIN 2</a>
-      </div>
-    </div>
-    <div class="dropdown">
-      <a>ANGKA 2D ▼</a>
-      <div class="dropdown-content">
-        <a href="#">2D AS</a>
-        <a href="#">2D EKOR</a>
-      </div>
-    </div>
-<div class="dropdown">
-      <a>ANGKA 3D ▼</a>
-      <div class="dropdown-content">
-        <a href="#">3D AS</a>
-        <a href="#">3D EKOR</a>
-      </div>
-    </div>
-<div class="dropdown">
-      <a>ANGKA 4D ▼</a>
-      <div class="dropdown-content">
-        <a href="#">4D AS</a>
-        <a href="#">4D EKOR</a>
-      </div>
-    </div>
-<div class="dropdown">
-      <a>BBFS ▼</a>
-      <div class="dropdown-content">
-        <a href="#">BBFS 8 Digit</a>
-        <a href="#">BBFS 7 Digit</a>
-        <a href="#">BBFS 6 Digit</a>
+  <aside class="w-56 bg-gray-900 text-white min-h-screen fixed top-0 left-0 overflow-y-auto">
+    <h2 class="text-center text-lg font-semibold text-yellow-400 py-4">Menu</h2>
 
+    <nav class="space-y-1">
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          SHIO <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D SHIO MAIN 1</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D SHIO MAIN 2</a>
+        </div>
       </div>
-    </div>
-  </div>
 
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          ANGKA 2D <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D AS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D EKOR</a>
+        </div>
+      </div>
 
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          ANGKA 3D <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">3D AS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">3D EKOR</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          ANGKA 4D <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">4D AS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">4D EKOR</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          BBFS <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">BBFS 8 Digit</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">BBFS 7 Digit</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">BBFS 6 Digit</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          Ekor Main <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Ekor Main 1</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Ekor Main 2</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Ekor Main 3</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          AS KOP <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">AS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">KOP</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Kepala</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Ekor</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          Generator Angka <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Generator 1</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Generator 2</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Generator 3</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Generator 4</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          PASARAN <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">SGP</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">HK POOLS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">HK LOTO</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">SYDNEY POOLS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">SYDNEY LOTO</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">CAMBODIA</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">CHINA</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">TAIWAN</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
 
   <!-- MAIN CONTENT -->
-  <div class="main">
-    <h1>Shio & Kecocokan Angka</h1>
-    <div id="shio-buttons"></div>
-    <div id="selected-shio">Pilih SHIO terlebih dahulu</div>
+  <main class="ml-56 p-6 max-w-2xl w-full">
+    <h1 class="text-center text-2xl font-bold mb-6">Shio & Kecocokan Angka</h1>
 
-    <label for="angka-main">Masukkan Angka Main (bisa lebih dari satu baris):</label>
-    <textarea id="angka-main" rows="4" placeholder="Contoh:\n01 03 07 10\n12 15 23 28"></textarea>
+    <div id="shio-buttons" class="mb-4"></div>
+    <div id="selected-shio" class="font-bold text-lg text-indigo-600 mb-4">Pilih SHIO terlebih dahulu</div>
 
-    <label for="ekor-main">Filter Ekor (digit terakhir), kosong artinya tanpa filter:</label>
-    <input type="text" id="ekor-main" placeholder="Misal: 1 2 3" />
+    <label for="angka-main" class="block font-semibold mb-1">Masukkan Angka Main:</label>
+    <textarea id="angka-main" rows="4" class="w-full border rounded p-2 mb-4" placeholder="01 03 07 10&#10;12 15 23 28"></textarea>
 
-    <button id="cek-angka">Cek Kecocokan</button>
+    <label for="ekor-main" class="block font-semibold mb-1">Filter Ekor:</label>
+    <input type="text" id="ekor-main" class="w-full border rounded p-2 mb-4" placeholder="Misal: 1 2 3" />
 
-    <div>
-      <label>SHIO Kuat:</label>
-      <div id="kuat-numbers"></div>
-      <div id="kuat-angka"></div>
-    </div>
+    <button id="cek-angka" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded mb-4">Cek Kecocokan</button>
 
     <div>
-      <label>SHIO Cadangan:</label>
-      <div id="cadangan-numbers"></div>
-      <div id="cadangan-angka"></div>
+      <label class="font-semibold">SHIO Kuat:</label>
+      <div id="kuat-numbers" class="flex flex-wrap gap-1 mt-1"></div>
+      <div id="kuat-angka" class="italic text-sm text-gray-700"></div>
     </div>
 
-    <div id="hasil-kecocokan"></div>
-    <div id="hasil-detail"></div>
-  </div>
+    <div class="mt-4">
+      <label class="font-semibold">SHIO Cadangan:</label>
+      <div id="cadangan-numbers" class="flex flex-wrap gap-1 mt-1"></div>
+      <div id="cadangan-angka" class="italic text-sm text-gray-700"></div>
+    </div>
+
+    <div id="hasil-kecocokan" class="mt-6"></div>
+    <div id="hasil-detail" class="bg-white border p-2 rounded mt-4 text-sm overflow-y-auto max-h-40"></div>
+  </main>
 
   <script>
-    /* SCRIPT KAMU TETAP SAMA */
+    /* Script kamu tetap sama */
   </script>
 </body>
 </html>
