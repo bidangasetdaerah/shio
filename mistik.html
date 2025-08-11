@@ -6,23 +6,159 @@
   <title>Angka Kuat Berdasarkan Tabel</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6">
+<body class="bg-gray-100 flex">
 
-  <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
-    <h1 class="text-xl font-bold mb-4 text-center">Cek Angka Kuat 4D Semua Kategori</h1>
+  <!-- Tombol Toggle Sidebar -->
+  <button id="toggleSidebar" class="p-3 bg-gray-800 text-white fixed top-3 left-3 z-50 rounded-md shadow-lg lg:hidden">
+    ☰
+  </button>
 
-    <!-- Input angka -->
-    <label class="block font-semibold mb-1">Masukkan Angka 4D:</label>
-    <input id="angka" type="text" maxlength="4" class="w-full border rounded p-2 mb-4" placeholder="Contoh: 4628">
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="w-56 bg-gray-900 text-white min-h-screen fixed top-0 left-0 overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+    <h2 class="text-center text-lg font-semibold text-yellow-400 py-4">Menu</h2>
+    <nav class="space-y-1">
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          SHIO <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D SHIO MAIN 1</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D SHIO MAIN 2</a>
+        </div>
+      </div>
 
-    <!-- Tombol cek -->
-    <button onclick="cekSemuaKategori()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded w-full">
-      Cek Semua Angka Kuat
-    </button>
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          Generator Angka <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="mistik.html" class="block px-6 py-2 hover:bg-gray-700">Angka Mistik</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Generator 2</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Generator 3</a>
+        </div>
+      </div>
+    </nav>
+  </aside><!-- SIDEBAR -->
+  <aside class="w-56 bg-gray-900 text-white min-h-screen fixed top-0 left-0 overflow-y-auto">
+    <h2 class="text-center text-lg font-semibold text-yellow-400 py-4">Menu</h2>
 
-    <!-- Hasil -->
-    <div id="hasil" class="mt-4 text-lg font-semibold"></div>
-  </div>
+    <nav class="space-y-1">
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          SHIO <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D SHIO MAIN 1</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D SHIO MAIN 2</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          ANGKA 2D <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D AS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">2D EKOR</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          ANGKA 3D <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">3D AS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">3D EKOR</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          ANGKA 4D <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">4D AS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">4D EKOR</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          BBFS <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">BBFS 8 Digit</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">BBFS 7 Digit</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">BBFS 6 Digit</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          Ekor Main <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Ekor Main 1</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Ekor Main 2</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Ekor Main 3</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          AS KOP <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">AS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">KOP</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Kepala</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Ekor</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          Generator Angka <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="mistik.html" class="block px-6 py-2 hover:bg-gray-700">Angka Mistik</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Generator 2</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Generator 3</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Generator 4</a>
+        </div>
+      </div>
+
+      <div class="group">
+        <button class="w-full text-left px-4 py-2 hover:bg-gray-700 flex justify-between items-center">
+          PASARAN <span>▼</span>
+        </button>
+        <div class="hidden group-hover:block bg-gray-800">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">SGP</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">HK POOLS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">HK LOTO</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">SYDNEY POOLS</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">SYDNEY LOTO</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">CAMBODIA</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">CHINA</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">TAIWAN</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- KONTEN -->
+  <main class="flex-1 lg:ml-56 p-6">
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+      <h1 class="text-xl font-bold mb-4 text-center">Cek Angka Kuat 4D Semua Kategori</h1>
+      <label class="block font-semibold mb-1">Masukkan Angka 4D:</label>
+      <input id="angka" type="text" maxlength="4" class="w-full border rounded p-2 mb-4" placeholder="Contoh: 4628">
+      <button onclick="cekSemuaKategori()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded w-full">
+        Cek Semua Angka Kuat
+      </button>
+      <div id="hasil" class="mt-4 text-lg font-semibold"></div>
+    </div>
+  </main>
 
   <script>
     const tabel = {
@@ -37,23 +173,19 @@
     function highlightPerubahan(asli, baru) {
       let hasil = "";
       for (let i = 0; i < asli.length; i++) {
-        if (asli[i] !== baru[i]) {
-          hasil += `<span class="bg-yellow-300 px-1 rounded">${baru[i]}</span>`;
-        } else {
-          hasil += baru[i];
-        }
+        hasil += (asli[i] !== baru[i])
+          ? `<span class="bg-yellow-300 px-1 rounded">${baru[i]}</span>`
+          : baru[i];
       }
       return hasil;
     }
 
     function cekSemuaKategori() {
       const angka = document.getElementById("angka").value.trim();
-
       if (!/^\d{4}$/.test(angka)) {
         document.getElementById("hasil").innerHTML = "⚠ Masukkan angka 4 digit yang valid";
         return;
       }
-
       let output = `
         <div class='grid grid-cols-3 gap-2 font-bold border-b pb-2 mb-2'>
           <div>Kategori</div>
@@ -61,15 +193,12 @@
           <div>Hasil</div>
         </div>
       `;
-
-      // Proses semua kategori
       for (let kategori in tabel) {
         let hasil = "";
         for (let digit of angka) {
           let konversi = tabel[kategori][parseInt(digit)];
           hasil += (konversi !== undefined) ? konversi : digit;
         }
-
         output += `
           <div class='grid grid-cols-3 gap-2 items-center border-b py-1'>
             <div>${kategori}</div>
@@ -78,10 +207,15 @@
           </div>
         `;
       }
-
       document.getElementById("hasil").innerHTML = output;
     }
-  </script>
 
+    // Toggle Sidebar untuk mobile
+    const toggleBtn = document.getElementById("toggleSidebar");
+    const sidebar = document.getElementById("sidebar");
+    toggleBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("-translate-x-full");
+    });
+  </script>
 </body>
 </html>
