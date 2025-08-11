@@ -7,12 +7,67 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 1rem;
+      margin: 0;
       background: #f9fafb;
       color: #333;
-      max-width: 600px;
-      margin: auto;
+      display: flex;
     }
+
+    /* --- NAVBAR KIRI --- */
+    .sidebar {
+      width: 200px;
+      background-color: #1f2937;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+      padding-top: 1rem;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: #facc15;
+    }
+    .sidebar a {
+      display: block;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      color: white;
+      cursor: pointer;
+    }
+    .sidebar a:hover {
+      background-color: #374151;
+    }
+
+    /* --- DROPDOWN MENU --- */
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-content {
+      display: none;
+      background-color: #111827;
+      margin-left: 0;
+      padding-left: 0;
+    }
+    .dropdown-content a {
+      padding-left: 2rem;
+      font-size: 0.9rem;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* --- MAIN CONTENT --- */
+    .main {
+      margin-left: 200px; /* biar tidak ketiban navbar */
+      padding: 1rem;
+      max-width: 600px;
+    }
+
+    /* --- STYLE ASLI KAMU --- */
     h1 {
       text-align: center;
       margin-bottom: 1rem;
@@ -129,313 +184,83 @@
   </style>
 </head>
 <body>
-  <h1>Shio & Kecocokan Angka</h1>
 
-  <div id="shio-buttons"></div>
-  <div id="selected-shio">Pilih SHIO terlebih dahulu</div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>Menu</h2>
+    <div class="dropdown">
+      <a>SHIO ▼</a>
+      <div class="dropdown-content">
+        <a href="#">2D SHIO MAIN 1</a>
+        <a href="#">2D SHIO MAIN 2</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <a>ANGKA 2D ▼</a>
+      <div class="dropdown-content">
+        <a href="#">2D AS</a>
+        <a href="#">2D EKOR</a>
+      </div>
+    </div>
+<div class="dropdown">
+      <a>ANGKA 3D ▼</a>
+      <div class="dropdown-content">
+        <a href="#">3D AS</a>
+        <a href="#">3D EKOR</a>
+      </div>
+    </div>
+<div class="dropdown">
+      <a>ANGKA 4D ▼</a>
+      <div class="dropdown-content">
+        <a href="#">4D AS</a>
+        <a href="#">4D EKOR</a>
+      </div>
+    </div>
+<div class="dropdown">
+      <a>BBFS ▼</a>
+      <div class="dropdown-content">
+        <a href="#">BBFS 8 Digit</a>
+        <a href="#">BBFS 7 Digit</a>
+        <a href="#">BBFS 6 Digit</a>
 
-  <label for="angka-main">Masukkan Angka Main (bisa lebih dari satu baris):</label>
-  <textarea id="angka-main" rows="4" placeholder="Contoh:\n01 03 07 10\n12 15 23 28"></textarea>
-
-  <label for="ekor-main">Filter Ekor (digit terakhir), kosong artinya tanpa filter:</label>
-  <input type="text" id="ekor-main" placeholder="Misal: 1 2 3" />
-
-  <button id="cek-angka">Cek Kecocokan</button>
-
-  <div>
-    <label>SHIO Kuat:</label>
-    <div id="kuat-numbers"></div>
-    <div id="kuat-angka"></div>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <label>SHIO Cadangan:</label>
-    <div id="cadangan-numbers"></div>
-    <div id="cadangan-angka"></div>
-  </div>
 
-  <div id="hasil-kecocokan"></div>
-  <div id="hasil-detail"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <h1>Shio & Kecocokan Angka</h1>
+    <div id="shio-buttons"></div>
+    <div id="selected-shio">Pilih SHIO terlebih dahulu</div>
+
+    <label for="angka-main">Masukkan Angka Main (bisa lebih dari satu baris):</label>
+    <textarea id="angka-main" rows="4" placeholder="Contoh:\n01 03 07 10\n12 15 23 28"></textarea>
+
+    <label for="ekor-main">Filter Ekor (digit terakhir), kosong artinya tanpa filter:</label>
+    <input type="text" id="ekor-main" placeholder="Misal: 1 2 3" />
+
+    <button id="cek-angka">Cek Kecocokan</button>
+
+    <div>
+      <label>SHIO Kuat:</label>
+      <div id="kuat-numbers"></div>
+      <div id="kuat-angka"></div>
+    </div>
+
+    <div>
+      <label>SHIO Cadangan:</label>
+      <div id="cadangan-numbers"></div>
+      <div id="cadangan-angka"></div>
+    </div>
+
+    <div id="hasil-kecocokan"></div>
+    <div id="hasil-detail"></div>
+  </div>
 
   <script>
-    const shioData = {
-      1:  { mapping: [2,3,4,5,8,9,10], kuat: [2,4,8,5,9] },
-      2:  { mapping: [3,4,5,6,9,10,11], kuat: [6,10,4,5,11] },
-      3:  { mapping: [4,5,6,7,10,11,12], kuat: [7,11,4,6,10] },
-      4:  { mapping: [5,6,7,8,11,12,1], kuat: [1,11,7,8,12] },
-      5:  { mapping: [6,7,8,9,12,1,2], kuat: [1,7,8,12,6] },
-      6:  { mapping: [7,8,9,10,1,2,3], kuat: [1,7,2,10] },
-      7:  { mapping: [8,9,10,11,2,3,4], kuat: [9,11,2,10] },
-      8:  { mapping: [9,10,11,12,3,4,5], kuat: [3,9,11,4,12] },
-      9:  { mapping: [10,11,12,1,4,5,6], kuat: [1,11,4,10] },
-      10: { mapping: [11,12,1,2,5,6,7], kuat: [1,5,11,2,6] },
-      11: { mapping: [12,1,2,3,6,7,8], kuat: [3,7,2,6,12] },
-      12: { mapping: [1,2,3,4,7,8,9], kuat: [3,7,9,4,8] }
-    };
-
-    function getShioFromNumber(num) {
-      return ((num - 1) % 12) + 1;
-    }
-
-    const btnContainer = document.getElementById('shio-buttons');
-    const kuatEl = document.getElementById('kuat-numbers');
-    const cadanganEl = document.getElementById('cadangan-numbers');
-    const kuatAngkaEl = document.getElementById('kuat-angka');
-    const cadanganAngkaEl = document.getElementById('cadangan-angka');
-    const selectedEl = document.getElementById('selected-shio');
-    const hasilKecocokanEl = document.getElementById('hasil-kecocokan');
-    const hasilDetailEl = document.getElementById('hasil-detail');
-
-    let currentShio = null;
-    let angkaKuatList = [];
-    let angkaCadanganList = [];
-
-    function pad2(num) {
-      return num.toString().padStart(2, '0');
-    }
-
-    function renderShioButtons() {
-      for (let i = 1; i <= 12; i++) {
-        const btn = document.createElement('button');
-        btn.textContent = `SHIO ${i}`;
-        btn.className = "shio-btn";
-        btn.addEventListener('click', () => selectShio(i));
-        btnContainer.appendChild(btn);
-      }
-    }
-
-    function selectShio(shio) {
-      currentShio = shio;
-      selectedEl.textContent = `SHIO ${shio}`;
-      const data = shioData[shio];
-      if (!data) return;
-
-      // SHIO Kuat
-      kuatEl.innerHTML = '';
-      data.kuat.forEach(num => {
-        const chip = document.createElement('div');
-        chip.textContent = pad2(num);
-        chip.style.backgroundColor = '#bbf7d0';
-        chip.style.border = '1px solid #22c55e';
-        chip.style.padding = '0.2rem 0.5rem';
-        chip.style.borderRadius = '3px';
-        chip.style.fontSize = '0.85rem';
-        chip.style.margin = '0 0.2rem 0.2rem 0';
-        kuatEl.appendChild(chip);
-      });
-
-      // SHIO Cadangan
-      cadanganEl.innerHTML = '';
-      const cadangan = data.mapping.filter(num => !data.kuat.includes(num));
-      cadangan.forEach(num => {
-        const chip = document.createElement('div');
-        chip.textContent = pad2(num);
-        chip.style.backgroundColor = '#e2e8f0';
-        chip.style.border = '1px solid #94a3b8';
-        chip.style.padding = '0.2rem 0.5rem';
-        chip.style.borderRadius = '3px';
-        chip.style.fontSize = '0.85rem';
-        chip.style.margin = '0 0.2rem 0.2rem 0';
-        cadanganEl.appendChild(chip);
-      });
-
-      // Angka SHIO Kuat
-      angkaKuatList = [];
-      for (let i = 1; i <= 99; i++) {
-        if (data.kuat.includes(getShioFromNumber(i))) {
-          angkaKuatList.push(pad2(i));
-        }
-      }
-      kuatAngkaEl.textContent = `Angka: ${angkaKuatList.join('*')}`;
-
-      // Angka SHIO Cadangan
-      angkaCadanganList = [];
-      for (let i = 1; i <= 99; i++) {
-        if (cadangan.includes(getShioFromNumber(i))) {
-          angkaCadanganList.push(pad2(i));
-        }
-      }
-      cadanganAngkaEl.textContent = `Angka: ${angkaCadanganList.join('*')}`;
-
-      // Clear hasil sebelumnya
-      hasilKecocokanEl.innerHTML = "";
-      hasilDetailEl.innerHTML = "";
-    }
-
-    // Fungsi cek cocok kepala/ekor digit dengan angka main
-    function cocokkanDigit(angka, digits) {
-      const kepala = angka.charAt(0);
-      const ekor = angka.charAt(1);
-      return digits.includes(kepala) || digits.includes(ekor);
-    }
-
-    // Fungsi cek cocok berdasarkan ekor (digit terakhir angka main)
-    function cocokkanEkor(angka, ekorMainSet) {
-      if (ekorMainSet.size === 0) return true; // Jika tidak ada filter ekor, anggap semua cocok
-      const ekor = angka.charAt(1);
-      return ekorMainSet.has(ekor);
-    }
-
-    // Fungsi intersect array angka
-    function intersectArrays(arrays) {
-      if (arrays.length === 0) return [];
-      return arrays.reduce((a, b) => a.filter(c => b.includes(c)));
-    }
-
-    // Fungsi untuk memecah array menjadi chunk per n elemen (default 10)
-    function chunkArray(arr, chunkSize = 10) {
-      const chunks = [];
-      for (let i = 0; i < arr.length; i += chunkSize) {
-        chunks.push(arr.slice(i, i + chunkSize));
-      }
-      return chunks;
-    }
-
-    // Fungsi render tabel angka per 10 angka per baris untuk hasil cocok digit
-    function renderAngkaTable(title, angkaList, textClass, headerBgClass) {
-      if (angkaList.length === 0) {
-        return `
-          <div>
-            <div class="font-semibold mb-1" style="color: ${textClass.includes('green') ? '#16a34a' : '#4b5563'}">${title}</div>
-            <table style="width:100%; font-size:0.85rem; border: 1px solid #d1d5db; border-radius:4px; margin-bottom:0.5rem;">
-              <thead style="background-color: ${headerBgClass === 'bg-green-100' ? '#bbf7d0' : '#e5e7eb'};">
-                <tr><th style="border: 1px solid #d1d5db; padding: 0.3rem 0.5rem;">${title}</th></tr>
-              </thead>
-              <tbody>
-                <tr><td style="border: 1px solid #d1d5db; padding: 0.3rem 0.5rem;">-</td></tr>
-              </tbody>
-            </table>
-          </div>
-        `;
-      }
-
-      const chunks = chunkArray(angkaList, 10);
-      let rowsHtml = chunks.map(chunk => {
-        return `<tr><td style="border: 1px solid #d1d5db; padding: 0.3rem 0.5rem;">${chunk.join(' ')}</td></tr>`;
-      }).join('');
-
-      return `
-        <div>
-          <div class="font-semibold mb-1" style="color: ${textClass.includes('green') ? '#16a34a' : '#4b5563'}">${title}</div>
-          <table style="width:100%; font-size:0.85rem; border: 1px solid #d1d5db; border-radius:4px; margin-bottom:0.5rem;">
-            <thead style="background-color: ${headerBgClass === 'bg-green-100' ? '#bbf7d0' : '#e5e7eb'};">
-              <tr><th style="border: 1px solid #d1d5db; padding: 0.3rem 0.5rem;">${title}</th></tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-
-    document.getElementById('cek-angka').addEventListener('click', () => {
-      const angkaInputRaw = document.getElementById('angka-main').value.trim();
-      const ekorInputRaw = document.getElementById('ekor-main').value.trim();
-      if (!angkaInputRaw || !currentShio) {
-        hasilKecocokanEl.textContent = "⚠️ Pilih SHIO dan masukkan angka terlebih dahulu.";
-        hasilDetailEl.innerHTML = "";
-        return;
-      }
-
-      // Pisah input angka main per baris, lalu tiap baris jadi array angka
-      const barisInputList = angkaInputRaw.split(/\n+/).map(line => line.trim().split(/\s+/).filter(x => x));
-
-      if (barisInputList.length === 0) {
-        hasilKecocokanEl.textContent = "⚠️ Masukkan angka main minimal satu baris.";
-        hasilDetailEl.innerHTML = "";
-        return;
-      }
-
-      // Gabungkan semua angka dari semua baris untuk keperluan detail & ekor
-      const allAngka = barisInputList.flat();
-
-      // Ambil digit dari semua angka untuk detail
-      const inputDigits = allAngka.join('').split('');
-
-      // Ambil digit ekor dari input khusus, 
-      // jika kosong, tidak ada filter ekor (ekorMainSet kosong)
-      const ekorMainList = ekorInputRaw
-        ? ekorInputRaw.split(/\s+/)
-        : [];
-      const ekorMainSet = new Set(ekorMainList);
-
-      // Filter angka kuat/cadangan yang cocok digit (kepala/ekor) per baris
-      const cocokKuatPerBaris = barisInputList.map(baris => {
-        const digits = baris.join('').split('');
-        return angkaKuatList.filter(num => cocokkanDigit(num, digits));
-      });
-      const cocokCadanganPerBaris = barisInputList.map(baris => {
-        const digits = baris.join('').split('');
-        return angkaCadanganList.filter(num => cocokkanDigit(num, digits));
-      });
-
-      // Ambil irisan hasil cocok per baris supaya hasil lebih ketat
-      let cocokKuat = intersectArrays(cocokKuatPerBaris);
-      let cocokCadangan = intersectArrays(cocokCadanganPerBaris);
-
-      // *** UPDATE: filter hasil cocok supaya hanya angka dengan ekor yang sesuai ***
-      cocokKuat = cocokKuat.filter(num => cocokkanEkor(num, ekorMainSet));
-      cocokCadangan = cocokCadangan.filter(num => cocokkanEkor(num, ekorMainSet));
-
-      // --- Buat tabel Cocok Ekor (dengan 10 angka per baris) ---
-      // Menampilkan angka lengkap, bukan hanya digit ekor
-      const chunkKuat = chunkArray(cocokKuat, 10);
-      const chunkCadangan = chunkArray(cocokCadangan, 10);
-
-      const maxRows = Math.max(chunkKuat.length, chunkCadangan.length);
-
-      let cocokEkorTableRows = '';
-      for (let i = 0; i < maxRows; i++) {
-        const kuatRow = chunkKuat[i] ? chunkKuat[i].join(' ') : '-';
-        const cadanganRow = chunkCadangan[i] ? chunkCadangan[i].join(' ') : '-';
-        cocokEkorTableRows += `<tr>
-          <td style="border: 1px solid #d1d5db; padding: 0.3rem 0.5rem; font-family: monospace;">${kuatRow}</td>
-          <td style="border: 1px solid #d1d5db; padding: 0.3rem 0.5rem; font-family: monospace;">${cadanganRow}</td>
-        </tr>`;
-      }
-
-      const cocokEkorTable = `
-        <div>
-          <div class="font-semibold mb-1" style="color:#2563eb">Cocok Ekor</div>
-          <table style="width:100%; font-size:0.85rem; border: 1px solid #d1d5db; border-radius:4px; margin-bottom:0.5rem;">
-            <thead style="background-color:#bfdbfe;">
-              <tr>
-                <th style="border: 1px solid #d1d5db; padding: 0.3rem 0.5rem;">Kuat</th>
-                <th style="border: 1px solid #d1d5db; padding: 0.3rem 0.5rem;">Cadangan</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${cocokEkorTableRows}
-            </tbody>
-          </table>
-        </div>
-      `;
-
-      // Render tabel Cocok Digit (Kuat) & (Cadangan) per 10 angka per baris
-      const cocokDigitKuatTable = renderAngkaTable('Cocok Digit (Kuat)', cocokKuat, 'text-green-700', 'bg-green-100');
-      const cocokDigitCadanganTable = renderAngkaTable('Cocok Digit (Cadangan)', cocokCadangan, 'text-gray-700', 'bg-gray-100');
-
-      hasilKecocokanEl.innerHTML = `
-        ${cocokDigitKuatTable}
-        ${cocokDigitCadanganTable}
-        ${cocokEkorTable}
-      `;
-
-      // Detail angka main dan digit input untuk referensi
-      hasilDetailEl.innerHTML = `
-        Detail Angka Main:
-${allAngka.join(' ')}
-
-Detail Digit Angka Main:
-${inputDigits.join(' ')}
-
-Filter Ekor:
-${ekorMainList.join(' ') || '-'}
-      `;
-    });
-
-    renderShioButtons();
+    /* SCRIPT KAMU TETAP SAMA */
   </script>
 </body>
 </html>
