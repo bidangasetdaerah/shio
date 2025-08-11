@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Angka Kuat Berdasarkan Tabel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+  <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <h1 class="text-xl font-bold mb-4 text-center">Cek Angka Kuat 4D Semua Kategori</h1>
+
+    <!-- Input angka -->
+    <label class="block font-semibold mb-1">Masukkan Angka 4D:</label>
+    <input id="angka" type="text" maxlength="4" class="w-full border rounded p-2 mb-4" placeholder="Contoh: 4628">
+
+    <!-- Tombol cek -->
+    <button onclick="cekSemuaKategori()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded w-full">
+      Cek Semua Angka Kuat
+    </button>
+
+    <!-- Hasil -->
+    <div id="hasil" class="mt-4 text-lg font-semibold"></div>
+  </div>
+
+  <script>
+    const tabel = {
+      "ML": { 0:1, 2:5, 3:8, 4:7, 6:9 },
+      "Mb": { 0:8, 2:6, 3:9, 4:5, 7:1 },
+      "Indx": { 0:5, 2:7, 3:8, 4:9, 1:6 },
+      "Ty": { 0:7, 2:9, 3:6, 4:1, 5:8 },
+      "MO": { 0:6, 1:5, 2:8, 3:7, 4:9 },
+      "M9": { 0:9, 1:8, 2:7, 3:6, 4:5 }
+    };
+
+    function highlightPerubahan(asli, baru) {
+      let hasil = "";
+      for (let i = 0; i < asli.length; i++) {
+        if (asli[i] !== baru[i]) {
+          hasil += `<span class="bg-yellow-300 px-1 rounded">${baru[i]}</span>`;
+        } else {
+          hasil += baru[i];
+        }
+      }
+      return hasil;
+    }
+
+    function cekSemuaKategori() {
+      const angka = document.getElementById("angka").value.trim();
+
+      if (!/^\d{4}$/.test(angka)) {
+        document.getElementById("hasil").innerHTML = "⚠ Masukkan angka 4 digit yang valid";
+        return;
+      }
+
+      let output = `
+        <div class='grid grid-cols-3 gap-2 font-bold border-b pb-2 mb-2'>
+          <div>Kategori</div>
+          <div>Asli</div>
+          <div>Hasil</div>
+        </div>
+      `;
+
+      // Proses semua kategori
+      for (let kategori in tabel) {
+        let hasil = "";
+        for (let digit of angka) {
+          let konversi = tabel[kategori][parseInt(digit)];
+          hasil += (konversi !== undefined) ? konversi : digit;
+        }
+
+        output += `
+          <div class='grid grid-cols-3 gap-2 items-center border-b py-1'>
+            <div>${kategori}</div>
+            <div class="text-gray-700">${angka}</div>
+            <div class="text-indigo-600">${highlightPerubahan(angka, hasil)}</div>
+          </div>
+        `;
+      }
+
+      document.getElementById("hasil").innerHTML = output;
+    }
+  </script>
+
+</body>
+</html>
